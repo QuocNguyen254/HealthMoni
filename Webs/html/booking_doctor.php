@@ -1,5 +1,5 @@
 <?php
-   include 'connect.php'; 
+   include '../php/connect.php'; 
    session_start();
 
 
@@ -67,24 +67,24 @@
                         <span class="material-icons">close</span>
                     </div>
                 </div>
-                <div class="sidebar">
-                    <a id="menu_home">
-                        <span class="material-icons">home</span>
-                        <h3>Home</h3>
-                    </a>
-                    <a id="menu_data">
-                        <span class="material-icons">query_stats</span>
-                        <h3>Dataview</h3>
-                    </a>
-                    <a id="menu_booking" class="active">
-                        <span class="material-icons">calendar_month</span>
-                        <h3>Booking</h3>
-                    </a>
-                    <a id="menu_logout">
-                        <span class="material-icons">logout</span>
-                        <h3>Logout</h3>
-                    </a>
-                </div>
+                 <div class="sidebar">
+                     <a id="menu_home" href="./home_doctor.php">
+                         <span class="material-icons" >home</span>
+                         <h3>Home</h3>
+                     </a>
+                     <a id="menu_data" href="./dataview_doctor.php">
+                         <span class="material-icons">query_stats</span>
+                         <h3>Dataview</h3>
+                     </a>
+                     <a id="menu_booking" class="active" href="./booking_doctor.php">
+                         <span class="material-icons">calendar_month</span>
+                         <h3>Booking</h3>
+                     </a>
+                     <a id="menu_logout" href="../php/logout.php">
+                         <span class="material-icons">logout</span>
+                         <h3>Logout</h3>
+                     </a>
+                 </div>
             </aside>
 
             <!-----------Main------------>
@@ -152,17 +152,12 @@
                     <button id="menu-btn">
                         <span class="material-icons">menu</span>
                     </button>
-                    <div class="theme-toggler">
-                        <span class="material-icons active">light_mode</span>
-                        <span class="material-icons">dark_mode</span>
-                    </div>
                     <div class="profile">
                         <div class="info">
                             <b id="username">' .$_SESSION['user_name']. '</b>
-                            <small class=""tect-muted>user</small>
                         </div>
                         <div class="profile-photo">
-                            <img src="../src/jpg/null.jpg">
+                            <img src="'. $_SESSION['userImage'] .'">
                         </div>
                     </div>
                 </div>

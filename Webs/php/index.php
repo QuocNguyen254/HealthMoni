@@ -2,6 +2,8 @@
 
 session_start();
 include "connect.php";
+
+
     if(isset($_POST['uname']) && isset($_POST['upass'])){
         function validate($data){
             $data = trim($data);
@@ -30,7 +32,11 @@ include "connect.php";
                     $_SESSION['user_name'] = $row['name'];
                     $_SESSION['name'] = $row['name'];
                     $_SESSION['id'] = $row['name'];
-                    header("Location: ../html/home.php");
+                    if ($row['usertype']=="Patient"){
+                        header("Location: ../html/home.php");
+                    }else{
+                        header("Location: ../html/home_doctor.php"); 
+                    }
                     exit();
                 }else{
                     header("Location: ../html/index.html");

@@ -45,21 +45,17 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
                 </div>
             </div>
             <div class="sidebar">
-                     <a id="menu_home" href="./home.php">
+                     <a id="menu_home" href="./home_doctor.php">
                          <span class="material-icons" >home</span>
                          <h3>Home</h3>
                      </a>
-                     <a id="menu_data" class="active" href="./dataview.php">
+                     <a id="menu_data" class="active" href="./dataview_doctor.php">
                          <span class="material-icons">query_stats</span>
                          <h3>Dataview</h3>
                      </a>
-                     <a id="menu_booking" href="./booking.php">
+                     <a id="menu_booking" href="./booking_doctor.php">
                          <span class="material-icons">calendar_month</span>
                          <h3>Booking</h3>
-                     </a>
-                     <a id="menu_doctors"  href="./doctor.php">
-                         <span class="material-icons">diversity_1</span>
-                         <h3>Doctors</h3>
                      </a>
                      <a id="menu_logout" href="../php/logout.php">
                          <span class="material-icons">logout</span>

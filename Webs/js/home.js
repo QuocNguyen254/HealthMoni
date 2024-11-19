@@ -29,19 +29,19 @@ window.onload = function() {
     getAllRecord();
 }
 
-function setMenuHypertext(){
-    const menu_home    = document.getElementById("menu_home");
-    const menu_data    = document.getElementById("menu_data");
-    const menu_booking = document.getElementById("menu_booking");
-    const menu_doctors = document.getElementById("menu_doctors");
-    const menu_logout  = document.getElementById("menu_logout");
+// function setMenuHypertext(){
+//     const menu_home    = document.getElementById("menu_home");
+//     const menu_data    = document.getElementById("menu_data");
+//     const menu_booking = document.getElementById("menu_booking");
+//     const menu_doctors = document.getElementById("menu_doctors");
+//     const menu_logout  = document.getElementById("menu_logout");
 
-    menu_home.href = "../html/home.php";
-    menu_data.href = "../html/dataview.html";
-    menu_booking.href = "../html/booking.html";
-    menu_doctors.href = "../html/doctors.html";
-    menu_logout.href  = "../php/logout.php";
-}
+//     menu_home.href = "../html/home.php";
+//     menu_data.href = "../html/dataview.html";
+//     menu_booking.href = "../html/booking.html";
+//     menu_doctors.href = "../html/doctors.html";
+//     menu_logout.href  = "../php/logout.php";
+// }
 
 function getUserInfo() {
     username = "name1";

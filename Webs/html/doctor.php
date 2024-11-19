@@ -1,9 +1,9 @@
 <?php
-   include 'connect.php'; 
+   include '../php/connect.php'; 
    session_start();
    $sql = "SELECT COUNT(*) AS total FROM doctors";
    $result = $conn->query($sql);
-   
+
    // Kiểm tra kết quả
    if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
@@ -60,23 +60,23 @@
                      </div>
                  </div>
                  <div class="sidebar">
-                     <a id="menu_home">
-                         <span class="material-icons">home</span>
+                     <a id="menu_home" href="./home.php">
+                         <span class="material-icons" >home</span>
                          <h3>Home</h3>
                      </a>
-                     <a id="menu_data">
+                     <a id="menu_data" href="./dataview.php">
                          <span class="material-icons">query_stats</span>
                          <h3>Dataview</h3>
                      </a>
-                     <a id="menu_booking">
+                     <a id="menu_booking" href="./booking.php">
                          <span class="material-icons">calendar_month</span>
                          <h3>Booking</h3>
                      </a>
-                     <a id="menu_doctors" class="active">
+                     <a id="menu_doctors" class="active" href="./doctor.php">
                          <span class="material-icons">diversity_1</span>
                          <h3>Doctors</h3>
                      </a>
-                     <a id="menu_logout">
+                     <a id="menu_logout" href="../php/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>
@@ -119,7 +119,6 @@
                      
                      <footer>
                          <div class="doc_container">
-                         <small>Updated Last 24 Hours</a>
                          </small>
                          </div>
                      </footer>
@@ -132,17 +131,12 @@
                      <button id="menu-btn">
                          <span class="material-icons">menu</span>
                      </button>
-                     <div class="theme-toggler">
-                         <span class="material-icons active">light_mode</span>
-                         <span class="material-icons">dark_mode</span>
-                     </div>
                      <div class="profile">
                          <div class="info">
                              <b id="username">' .$_SESSION['user_name']. '</b>
-                             <small class=""tect-muted>user</small>
                          </div>
                          <div class="profile-photo">
-                             <img src="../src/jpg/null.jpg">
+                             <img src="'. $_SESSION['userImage'] .'">
                          </div>
                      </div>
                  </div>
