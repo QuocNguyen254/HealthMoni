@@ -6,6 +6,7 @@ var chart = null, title, rcd_title, rcd_color, rcd_data, rcd_date;
 var username;
 var dat_BPS, dat_BPD, dat_HR, dat_Steps, dat_Kcal, dat_Date;
 var weight = 70, height = 183, kcalRatio = 101/3202500;
+var theme;
 
 window.onload = function() {
     // menu listener
@@ -25,26 +26,25 @@ window.onload = function() {
 
     setMenuHypertext();
     getUserInfo();
-    updateUserInfo();
+    //updateUserInfo();
     getAllRecord();
 }
 
-// function setMenuHypertext(){
-//     const menu_home    = document.getElementById("menu_home");
-//     const menu_data    = document.getElementById("menu_data");
-//     const menu_booking = document.getElementById("menu_booking");
-//     const menu_doctors = document.getElementById("menu_doctors");
-//     const menu_logout  = document.getElementById("menu_logout");
+function setMenuHypertext(){
+    const menu_home    = document.getElementById("menu_home");
+    const menu_data    = document.getElementById("menu_data");
+    const menu_booking = document.getElementById("menu_booking");
+    const menu_doctors = document.getElementById("menu_doctors");
+    const menu_logout  = document.getElementById("menu_logout");
 
-//     menu_home.href = "../html/home.php";
-//     menu_data.href = "../html/dataview.html";
-//     menu_booking.href = "../html/booking.html";
-//     menu_doctors.href = "../html/doctors.html";
-//     menu_logout.href  = "../php/logout.php";
-// }
+    menu_home.href = "../html/home.php";
+    menu_data.href = "../html/dataview.php";
+    menu_booking.href = "../html/booking.html";
+    menu_doctors.href = "../html/doctors.html";
+    menu_logout.href  = "../php/logout.php";
+}
 
 function getUserInfo() {
-    username = "name1";
 }
 
 function updateUserInfo() {
@@ -124,6 +124,7 @@ function updateChart(type) {
 	});
 
     if(type == 'BP_S')  addBoundLine(chart, 140, 90);
+    if(type == 'none')  addBoundLine(chart, 140, 90);
     if(type == 'BP_D')  addBoundLine(chart, 90, 60);
     if(type == 'HR')    addBoundLine(chart, 100, 60);
     if(type == 'Steps') addKcalLine(chart, dat_Kcal, "Kcal", "#eeee00");
@@ -131,6 +132,12 @@ function updateChart(type) {
 
 function updateChartData(type){
     switch(type){
+        case 'none':
+            title = "The Default Chart";
+            rcd_title = "Blood Pressure - systolic (mmHg)";
+            rcd_color = "#677483";
+            rcd_data = dat_BPS;
+            break;
         case 'BP_S':
             title = "Blood Pressure (systolic)";
             rcd_title = "Blood Pressure - systolic (mmHg)";
