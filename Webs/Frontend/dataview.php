@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-include '../php/connect.php'; 
+include '../Backend/connect.php'; 
 if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
 
 ?>
@@ -29,7 +29,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
 
     <!-- Function -->
     <script src="../js/home.js"></script>
-
+    <!-- <script src="../js/dataview.js"></script> -->
 </head>
 
 <body>
@@ -45,19 +45,23 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
                 </div>
             </div>
             <div class="sidebar">
-                     <a id="menu_home" href="./home_doctor.php">
+                     <a id="menu_home" href="./home.php">
                          <span class="material-icons" >home</span>
                          <h3>Home</h3>
                      </a>
-                     <a id="menu_data" class="active" href="./dataview_doctor.php">
+                     <a id="menu_data" class="active" href="./dataview.php">
                          <span class="material-icons">query_stats</span>
                          <h3>Dataview</h3>
                      </a>
-                     <a id="menu_booking" href="./booking_doctor.php">
+                     <a id="menu_booking" href="./booking.php">
                          <span class="material-icons">calendar_month</span>
                          <h3>Booking</h3>
                      </a>
-                     <a id="menu_logout" href="../php/logout.php">
+                     <a id="menu_doctors"  href="./doctor.php">
+                         <span class="material-icons">diversity_1</span>
+                         <h3>Doctors</h3>
+                     </a>
+                     <a id="menu_logout" href="../Backend/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>
@@ -113,7 +117,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
 <?php
 
 }else{
-    header("Location: ../html/index.html");
+    header("Location: ../Frontend/index.html");
     exit();
 }
 ?>

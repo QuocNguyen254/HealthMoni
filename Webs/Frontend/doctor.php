@@ -1,5 +1,5 @@
 <?php
-   include '../php/connect.php'; 
+   include '../Backend/connect.php'; 
    session_start();
    $sql = "SELECT COUNT(*) AS total FROM doctors";
    $result = $conn->query($sql);
@@ -76,7 +76,7 @@
                          <span class="material-icons">diversity_1</span>
                          <h3>Doctors</h3>
                      </a>
-                     <a id="menu_logout" href="../php/logout.php">
+                     <a id="menu_logout" href="../Backend/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>

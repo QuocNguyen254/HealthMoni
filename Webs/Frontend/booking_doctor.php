@@ -1,5 +1,5 @@
 <?php
-   include '../php/connect.php'; 
+   include '../Backend/connect.php'; 
    session_start();
 
 
@@ -80,7 +80,7 @@
                          <span class="material-icons">calendar_month</span>
                          <h3>Booking</h3>
                      </a>
-                     <a id="menu_logout" href="../php/logout.php">
+                     <a id="menu_logout" href="../Backend/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>
@@ -317,7 +317,7 @@
 
         }
     }else {
-        echo "Không có dữ liệu.";        
+        // echo "Không có dữ liệu.";        
     }
 
     //Lich hen hom nay
@@ -370,7 +370,7 @@
             }           
         }
     }else {
-        echo "Không có dữ liệu Today meeting"; 
+        // echo "Không có dữ liệu Today meeting"; 
     }
     if ($isTodayMeeting==0){
         $xpath = new DOMXPath($dom);
@@ -382,9 +382,8 @@
         // Lấy giá trị 'username' từ POST
         $meetingId = $_POST['meetingid'];
         $_SESSION['meetingId'] = $meetingId;        
-        echo "Meeting Id:  AHHAHAHAH" . $meetingId;
     } else {
-        
+
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['MeetingLink'])) {
         // Tách ngày và thời gian bằng cách sử dụng dấu cách
@@ -397,6 +396,7 @@
         ;
         ";
         $result_2 = $conn->query($sql_2);  
+        $_SESSION['meetingId'] = "";
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmButton'])) {
@@ -409,6 +409,7 @@
         ;
         ";
         $result_2 = $conn->query($sql_2);  
+        $_SESSION['meetingId'] = "";
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmButtonAvailableMeeting'])) {
@@ -421,6 +422,7 @@
         ;
         ";
         $result_2 = $conn->query($sql_2);  
+        $_SESSION['meetingId'] = "";
     }
     echo $dom->saveHTML();
 

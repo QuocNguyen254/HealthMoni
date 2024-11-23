@@ -1,52 +1,75 @@
-var data, num = 1;
-
+var data, num_row = 20;
+var row_sheet;
 getAllRecord();
 
-function addAllDataOnList(){
-    data.feeds.forEach(feed => {
-        var date = feed.created_at;
-        if (feed.field1 != null) appendDataOnList(num++, "Blood Pressure (systolic)" , date, feed.field1, "normal");
-        if (feed.field2 != null) appendDataOnList(num++, "Blood Pressure (diastolic)", date, feed.field2, "normal");
-        if (feed.field3 != null) appendDataOnList(num++, "Heart Rate"                , date, feed.field3, "normal");
-        if (feed.field4 != null) appendDataOnList(num++, "Steps"                     , date, feed.field4, "normal");
-    });
+const csvUrl = "https://docs.google.com/spreadsheets/d/1vspmThGg-eyWESmkJni8JHg2cARbj6tuPlPB_9E4INI/export?format=csv";
+const interval = 0; //(tần suất cập nhật)
+
+function fetchGoogleSheetData() {
+    fetch(csvUrl)
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.split("\n").map(row => row.split(","));
+            
+            // Log dữ liệu ra console
+            console.clear(); // Xóa console trước đó
+            console.log("Dữ liệu từ Google Sheets:");
+            console.table(rows); // Hiển thị dưới dạng bảng (nếu trình duyệt hỗ trợ)
+            console.log(row_sheet);
+            rows.slice(1).forEach((row, index) => {
+                let type = row[0];  // heartrate/spo2
+                let date = row[1];  // datetime
+                let value = row[2]; // value
+                if (type && date && value) {
+                    appendDataOnList(index+1, type, date, value, "normal");
+                }
+            });
+            
+        })
+        .catch(error => console.error("Lỗi khi lấy dữ liệu từ Google Sheets:", error));
 }
 
-function getAllRecord() {
-    var urlHere = "https://api.thingspeak.com/channels/1875551/feed.json?";
-    urlHere = urlHere + "pi_key=NEI1NVRI0SIQ2RV6&results=100";
-    console.log("Accessing " + urlHere);
-    request.open('GET', urlHere, true);
-    request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-            data = JSON.parse(request.responseText);
-            console.log("Get All Record from ThingSpeak:" + data);
-            addAllDataOnList();
-        } else {
-            console.error("Cannot get JSON from ThingSpeak");
-        }
-    };
-    request.send();
+// Gọi hàm lần đầu và lặp lại mỗi 5 giây
+fetchGoogleSheetData();
+setInterval(fetchGoogleSheetData, interval);
+
+let rows = []; // Mảng để lưu các dòng
+
+function createEmptyRows() {
+    let rowsHtml = ''; // Khởi tạo chuỗi HTML rỗng
+    for (let i = 0; i < num_row; i++) {
+        // Tạo chuỗi HTML cho mỗi dòng
+        rowsHtml += `
+            <tr id="row-${i}">
+                <td>${i + 1}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        `;
+    }
+
+    // Gắn chuỗi HTML vào bảng
+    document.getElementById("rows").innerHTML = rowsHtml;
+
+    // Lưu các dòng vào mảng rows
+    rows = Array.from(document.querySelectorAll("#rows tr"));
 }
 
-function appendDataOnList(num, type, date, value, status){
-    var newRow = document.createElement("tr");
-    var _num = document.createElement("td");
-    var _type = document.createElement("td");
-    var _date = document.createElement("td");
-    var _value = document.createElement("td");
-    var _status = document.createElement("td");
+function appendDataOnList(num, type, date, value, status) {
+    // Lấy dòng tương ứng với num
+    const row = rows[num - 1]; // Mảng rows bắt đầu từ index 0 nên trừ 1
 
-    _num.innerHTML = num;
-    _type.innerHTML = type;
-    _date.innerHTML = date;
-    _value.innerHTML = value;
-    _status.innerHTML = status;
-    
-    newRow.append(_num);
-    newRow.append(_type);
-    newRow.append(_date);
-    newRow.append(_value);
-    newRow.append(_status);
-    document.getElementById("rows").appendChild(newRow);
+    // Lấy các ô td trong dòng đó
+    const cells = row.getElementsByTagName("td");
+
+    // Cập nhật giá trị trong các ô
+    cells[1].innerHTML = type;
+    cells[2].innerHTML = date;
+    cells[3].innerHTML = value;
+    cells[4].innerHTML = status;
 }
+
+createEmptyRows();
+

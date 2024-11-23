@@ -1,5 +1,5 @@
 <?php
- include '../php/connect.php'; 
+ include '../Backend/connect.php'; 
 session_start();
 
 $sql_1 = "SELECT ImageLink AS userImage FROM users where name = '".$_SESSION['user_name']."'";
@@ -57,7 +57,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
                          <span class="material-icons">calendar_month</span>
                          <h3>Booking</h3>
                      </a>
-                     <a id="menu_logout" href="../php/logout.php">
+                     <a id="menu_logout" href="../Backend/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>
@@ -77,8 +77,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
                 <div class="welcome">
                     <h2 id="welcome">Hi, <?php echo $_SESSION['name']; ?>  </h2>
                     <h2>You are viewing </h2>
-                    <h1 class="dataChartTitle" id="dataChartTitle">
-                        Blood Pressure (systolic)</h1>
+                    <h1 class="dataChartTitle" id="dataChartTitle">Default Chart</h1>
                 </div>
                 <div class="dataChart">
                     <canvas id="line-chart"></canvas>
@@ -93,47 +92,22 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
                     <span class="material-icons">water_drop</span>
                     <div class="middle">
                         <div class="left">
-                            <h3>Blood pressure (systolic)</h3>
-                            <h1 id="card_BPS">110 mmHg</h1>
+                            <h3>SpO2 (Saturation of Peripheral Oxygen)</h3>
+                            <h1 id="card_BPS">0 %</h1>
                         </div>
                     </div>
-                    <small class="text-muted">Last 24 Hours</small>
+
                 </div>
-                <!--End of Card-->
-                <!-- <div class="card-BP" onclick="updateChart('BP_D')">
-                    <span class="material-icons">water_drop</span>
-                    <div class="middle">
-                        <div class="left">
-                            <h3>Blood Glucose</h3>
-                            <h1 id="card_BPD" hidden="true">11 mmHg</h1>
-                            <h1 id="card_BG">11 mmHg</h1>
-                        </div>
-                    </div>
-                    <small class="text-muted">Last 24 Hours</small>
-                </div> -->
-                <!--End of Card-->
                 <div class="card-HR" onclick="updateChart('HR')">
                     <span class="material-icons">monitor_heart</span>
                     <div class="middle">
                         <div class="left">
                             <h3>Heart Rate</h3>
-                            <h1 id="card_HR">82 bpm</h1>
+                            <h1 id="card_HR">0 bpm</h1>
                         </div>
                     </div>
-                    <small class="text-muted">Last 24 Hours</small>
+
                 </div>
-                <!--End of Card-->
-                <!-- <div class="card-Steps" onclick="updateChart('Steps')">
-                    <span class="material-icons">directions_walk</span>
-                    <div class="middle">
-                        <div class="left">
-                            <h3>Walks</h3>
-                            <h1 id="card_Steps">12482 steps</h1>
-                        </div>
-                    </div>
-                    <small class="text-muted">Last 24 Hours</small>
-                </div> -->
-                <!--End of Card-->
             </div>
         </main>
         <!-- End of main -->
@@ -165,7 +139,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
 <?php
 
 }else{
-    header("Location: ../html/index.html");
+    header("Location: ../Frontend/index.html");
     exit();
 }
 ?>

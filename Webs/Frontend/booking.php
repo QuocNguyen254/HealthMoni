@@ -1,24 +1,15 @@
 <?php
-   include '../php/connect.php'; 
+   include '../Backend/connect.php'; 
 
    session_start();
-    
-    $doctorNameTemp = $_SESSION['doctorName'];
-    $doctorMajorTemp = $_SESSION['doctorMajor'];
-    $_SESSION['doctorName'] ="";
-    $_SESSION['doctorMajor'] ="";
+   if(isset($_GET['doctorName'])&&isset($_GET['medicalSpecialty'])){
+    $_SESSION['doctorName'] =$_GET['doctorName'];
+    $_SESSION['doctorMajor'] =$_GET['medicalSpecialty'];    
+   }
     $dom = new DOMDocument;
-
     // Để xử lý tốt hơn với HTML5
     libxml_use_internal_errors(true);
 
-    $_SESSION['doctorName'] =$doctorNameTemp;
-    $_SESSION['doctorMajor'] =$doctorMajorTemp;  
-    
-    if (isset($_GET['doctorName'])&& isset($_GET['medicalSpecialty'])){
-        $_SESSION['doctorName'] = $_GET['doctorName'];
-        $_SESSION['doctorMajor'] = $_GET['medicalSpecialty'];
-    }
     // Nhúng mã HTML trực tiếp
     $dom->loadHTML('
     <!DOCTYPE html>
@@ -81,7 +72,7 @@
                          <span class="material-icons">diversity_1</span>
                          <h3>Doctors</h3>
                      </a>
-                     <a id="menu_logout" href="../php/logout.php">
+                     <a id="menu_logout" href="../Backend/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>
@@ -200,7 +191,7 @@
     // echo "doctorName: " .$doctorName;
     // echo "doctorMajor: " .$doctorMajor;   
 
-    // if (isset($_GET['doctorName'])) {
+    if (!empty($_SESSION['doctorName'])) {
         $name = $_SESSION['doctorName'];
         // Tạo đối tượng DOMXPath
         $xpath = new DOMXPath($dom);
@@ -248,9 +239,9 @@
         }
         // echo $dom->saveHTML();
 
-    // }else{
-    //     echo "Không có dữ liệu.";
-    // }
+    }else{
+        // echo "Không có dữ liệu.";
+    }
     
     $xpath = new DOMXPath($dom);
         
@@ -374,7 +365,7 @@
         $element = $appointmentToday->item(0); // Lấy phần tử đầu tiên
         $element->nodeValue = "You don't have any appointments today"; // Thay đổi nội dung
     }  
-    if ($_SESSION['doctorName'] ==""){
+    if (empty($_SESSION['doctorName'])){
         $xpath = new DOMXPath($dom);
         
         $doctorChooseLegend = $xpath->query('//legend[@id="doctor-choose"]');
@@ -383,7 +374,7 @@
         
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST"&&!empty($_SESSION['doctorName'])&&!empty($_SESSION['doctorMajor'])&&!empty($_POST['appointmentDate'])) {
         $appointmentDate = $_POST['appointmentDate'];
         // Tách ngày và thời gian bằng cách sử dụng dấu cách
         list($date, $time) = explode(' ', $appointmentDate);
@@ -397,7 +388,7 @@
         $row_1 = $result_1->fetch_assoc();
         $date_index = $row_1['total'] + 1;
         $sql_2 =  "
-        INSERT INTO meetingdate values ('". $date_index ."','". $patientId ."','". $doctorId ."','". $appointmentDate ."','In progress');
+        INSERT INTO meetingdate values ('". $date_index ."','". $patientId ."','". $doctorId ."','". $appointmentDate ."','In progress','NOLINK". $date_index ."');
         ";
         $result_2 = $conn->query($sql_2);  
     }
