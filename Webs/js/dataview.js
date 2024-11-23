@@ -2,7 +2,7 @@ var data, num_row = 20;
 var row_sheet;
 getAllRecord();
 
-const csvUrl = "https://docs.google.com/spreadsheets/d/1azhjFHceRSeBAMogVSAKg56ciFvxsHt6KbRCcl0vWeM/export?format=csv";
+const csvUrl = "https://docs.google.com/spreadsheets/d/1vspmThGg-eyWESmkJni8JHg2cARbj6tuPlPB_9E4INI/export?format=csv";
 const interval = 0; //(tần suất cập nhật)
 
 function fetchGoogleSheetData() {

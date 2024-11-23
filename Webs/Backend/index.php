@@ -2,8 +2,8 @@
 
 session_start();
 include "connect.php";
-
-
+$_SESSION['doctorName'] = "";
+$_SESSION['doctorMajor'] = "";
     if(isset($_POST['uname']) && isset($_POST['upass'])){
         function validate($data){
             $data = trim($data);
@@ -15,10 +15,10 @@ include "connect.php";
         $uname = validate($_POST['uname']);
         $pass = validate($_POST['upass']);
         if(empty($uname)){
-            header("Location: ../html/index.html");
+            header("Location: ../Frontend/index.html");
             exit();
         }else if(empty($pass)){
-            header("Location: ../html/index.html");
+            header("Location: ../Frontend/index.html");
             exit();
         }else{
             
@@ -33,22 +33,22 @@ include "connect.php";
                     $_SESSION['name'] = $row['name'];
                     $_SESSION['id'] = $row['name'];
                     if ($row['usertype']=="Patient"){
-                        header("Location: ../html/home.php");
+                        header("Location: ../Frontend/home.php");
                     }else{
-                        header("Location: ../html/home_doctor.php"); 
+                        header("Location: ../Frontend/home_doctor.php"); 
                     }
                     exit();
                 }else{
-                    header("Location: ../html/index.html");
+                    header("Location: ../Frontend/index.html");
                     exit();
                 }
             }else{
-                header("Location: ../html/index.html");
+                header("Location: ../Frontend/index.html");
                 exit();
             }
         }
     }else{
-        header("Location: ../html/index.html");
+        header("Location: ../Frontend/index.html");
         exit();
     }
 

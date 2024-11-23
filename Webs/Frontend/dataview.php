@@ -1,3 +1,11 @@
+
+<?php
+session_start();
+include '../Backend/connect.php'; 
+if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +29,7 @@
 
     <!-- Function -->
     <script src="../js/home.js"></script>
+    <!-- <script src="../js/dataview.js"></script> -->
 </head>
 
 <body>
@@ -36,27 +45,27 @@
                 </div>
             </div>
             <div class="sidebar">
-                <a id="menu_home">
-                    <span class="material-icons">home</span>
-                    <h3>Home</h3>
-                </a>
-                <a id="menu_data" class="active">
-                    <span class="material-icons">query_stats</span>
-                    <h3>Dataview</h3>
-                </a>
-                <a id="menu_booking">
-                    <span class="material-icons">calendar_month</span>
-                    <h3>Booking</h3>
-                </a>
-                <a id="menu_doctors">
-                    <span class="material-icons">diversity_1</span>
-                    <h3>Doctors</h3>
-                </a>
-                <a id="menu_logout">
-                    <span class="material-icons">logout</span>
-                    <h3>Logout</h3>
-                </a>
-            </div>
+                     <a id="menu_home" href="./home.php">
+                         <span class="material-icons" >home</span>
+                         <h3>Home</h3>
+                     </a>
+                     <a id="menu_data" class="active" href="./dataview.php">
+                         <span class="material-icons">query_stats</span>
+                         <h3>Dataview</h3>
+                     </a>
+                     <a id="menu_booking" href="./booking.php">
+                         <span class="material-icons">calendar_month</span>
+                         <h3>Booking</h3>
+                     </a>
+                     <a id="menu_doctors"  href="./doctor.php">
+                         <span class="material-icons">diversity_1</span>
+                         <h3>Doctors</h3>
+                     </a>
+                     <a id="menu_logout" href="../Backend/logout.php">
+                         <span class="material-icons">logout</span>
+                         <h3>Logout</h3>
+                     </a>
+                 </div>
         </aside>
 
         <!-----------Main------------>
@@ -84,17 +93,13 @@
                 <button id="menu-btn">
                     <span class="material-icons">menu</span>
                 </button>
-                <div class="theme-toggler">
-                    <span class="material-icons active">light_mode</span>
-                    <span class="material-icons">dark_mode</span>
-                </div>
+
                 <div class="profile">
                     <div class="info">
-                        <b id="username">-</b>
-                        <small class="" tect-muted>user</small>
+                        <b id="username"><?php echo $_SESSION['name']; ?></b>
                     </div>
                     <div class="profile-photo">
-                        <img src="../src/jpg/null.jpg">
+                        <img src="<?php echo $_SESSION['userImage']; ?>">
                     </div>
                 </div>
             </div>
@@ -109,3 +114,10 @@
 </body>
 
 </html>
+<?php
+
+}else{
+    header("Location: ../Frontend/index.html");
+    exit();
+}
+?>

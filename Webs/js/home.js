@@ -4,11 +4,60 @@ var arraySize = 7;
 var request = new XMLHttpRequest(); 
 var chart = null, title, rcd_title, rcd_color, rcd_data, rcd_date;
 var username;
-var dat_BPS, dat_BPD, dat_HR, dat_Steps, dat_Kcal, dat_Date;
-var weight = 70, height = 183, kcalRatio = 101/3202500;
-var theme;
+var dat_BPS, dat_Date;
+let dat_HR = [];
+var low_HR = 200, up_HR = 0, low_BPS = 200, up_BPS = 0;
+const csvUrl2 = "https://docs.google.com/spreadsheets/d/1azhjFHceRSeBAMogVSAKg56ciFvxsHt6KbRCcl0vWeM/export?format=csv";
+const interval2 = 0; //(tần suất cập nhật)
+
+function get_data() {
+    fetch(csvUrl2)
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.split("\n").map(row => row.split(","));
+            
+            // Log dữ liệu ra console
+            console.clear(); // Xóa console trước đó
+            console.log("Dữ liệu từ Google Sheets:");
+            console.table(rows); // Hiển thị dưới dạng bảng (nếu trình duyệt hỗ trợ)
+            low_HR = 200; 
+            up_HR = 0; 
+            low_BPS = 200;
+            up_BPS = 0;
+            rows.slice(1).forEach((row, index) => {
+                let type = row[0];  // heartrate/spo2
+                let date = row[1];  // datetime
+                let value = row[2]; // value
+                if (type && date && value && (index/2 | 0) < arraySize) {
+                    if (type == "HeartRate") 
+                    {
+                        dat_HR[index/2 | 0] = value;
+                        if (low_HR>Number(value)) low_HR=Number(value);
+                        if (up_HR<Number(value)) up_HR=Number(value);
+                    }
+                    if (type == "SpO2")
+                    {
+                        dat_BPS[index/2] = value;
+                        if (low_BPS>Number(value)) low_BPS=Number(value);
+                        if (up_BPS<Number(value)) up_BPS=Number(value);
+                    }
+                    dat_Date[index/2] = date;
+                }
+            });
+            // updateChart(type);
+        })
+        .catch(error => console.error("Lỗi khi lấy dữ liệu từ Google Sheets:", error));
+}
+
+// Gọi hàm lần đầu và lặp lại mỗi 5 giây
+get_data();
+setInterval(get_data, 0);
 
 window.onload = function() {
+    var tit2 = document.getElementById("dataChartTitle");
+    tit2.textContent = "Default Chart";
+    tit2.style.color = "#677483";
+
     // menu listener
     const sideMenu = document.getElementById("aside");
     const menuBtn  = document.getElementById("menu-btn");
@@ -26,25 +75,17 @@ window.onload = function() {
 
     setMenuHypertext();
     getUserInfo();
-    //updateUserInfo();
-    getAllRecord();
+    updateUserInfo();
+    // updateCardData();
+    // updateChart('BP_S');
+    // getAllRecord();
 }
 
-function setMenuHypertext(){
-    const menu_home    = document.getElementById("menu_home");
-    const menu_data    = document.getElementById("menu_data");
-    const menu_booking = document.getElementById("menu_booking");
-    const menu_doctors = document.getElementById("menu_doctors");
-    const menu_logout  = document.getElementById("menu_logout");
-
-    menu_home.href = "../html/home.php";
-    menu_data.href = "../html/dataview.php";
-    menu_booking.href = "../html/booking.html";
-    menu_doctors.href = "../html/doctors.html";
-    menu_logout.href  = "../php/logout.php";
-}
+dat_BPS = [10,20,30,40,50,60,10];
+dat_Date = ['11/20 02:54:36', '11/21 02:55:14', '11/22 02:55:53', '11/23 01:30:34', '11/23 01:43:23', '11/23 01:43:45', '11/23 02:56:31'];
 
 function getUserInfo() {
+    username = "name1";
 }
 
 function updateUserInfo() {
@@ -56,45 +97,14 @@ function updateUserInfo() {
 }
 
 function getAllRecord() {
-    var urlHere = "https://api.thingspeak.com/channels/1875551/feed.json?";
-    urlHere = urlHere + "pi_key=NEI1NVRI0SIQ2RV6&results=" + arraySize;
-    console.log("Accessing " + urlHere);
-    request.open('GET', urlHere, true);
-    request.onload = function() {
-        if (request.status >= 200 && request.status < 400) {
-            data = JSON.parse(request.responseText);
-            console.log("Get All Record from ThingSpeak:" + data);
-            dat_Date  = data.feeds.map(function(feed){ 
-                var str = feed.created_at;
-                return str.substring(5, 7)+"/"+str.substring(8, 10)+" "+str.substring(11, 19);
-            });
-            dat_BPS   = data.feeds.map(function(feed){ return feed.field1; });
-            dat_BPD   = data.feeds.map(function(feed){ return feed.field2; });
-            dat_HR    = data.feeds.map(function(feed){ return feed.field3; });
-            dat_Steps = data.feeds.map(function(feed){ return feed.field4; });
-            var kcalPerStep = weight*height*kcalRatio;
-            dat_Kcal  = dat_Steps.map(function(step){ return step * kcalPerStep; });
-            updateCardData();
-            updateChart('BP_S');
-        } else {
-            console.error("Cannot get JSON from ThingSpeak");
-        }
-    };
-
-    request.send();
 }
 
 function updateCardData() {
     console.log("updateCardData()");
     var card_BPS    = document.getElementById("card_BPS");
-    var card_BPD    = document.getElementById("card_BPD");
     var card_HR     = document.getElementById("card_HR" );
-    var card_Steps  = document.getElementById("card_Steps");
-
-    card_BPS.textContent    = (dat_BPS[arraySize-1]!=null?dat_BPS[arraySize-1]:0)   + " mmHg" ;
-    card_BPD.textContent    = (dat_BPD[arraySize-1]!=null?dat_BPD[arraySize-1]:0)   + " mmHg" ;
+    card_BPS.textContent    = (dat_BPS[arraySize-1]!=null?dat_BPS[arraySize-1]:0)   + " %" ;
     card_HR.textContent     = (dat_HR[arraySize-1]!=null ?dat_HR[arraySize-1]:0)     + " bpm"  ;
-    card_Steps.textContent  = (dat_Steps[arraySize-1]!=null?dat_Steps[arraySize-1]:0) + " steps";
 }
 
 function updateChart(type) {
@@ -102,6 +112,7 @@ function updateChart(type) {
     var ctx = document.getElementById("line-chart").getContext('2d');
     var tit = document.getElementById("dataChartTitle");
     window.scrollTo(0, 0);
+
     updateChartData(type);
 
     tit.style.color = rcd_color;
@@ -122,33 +133,19 @@ function updateChart(type) {
             title: {display: false}
         }
 	});
-
-    if(type == 'BP_S')  addBoundLine(chart, 140, 90);
-    if(type == 'none')  addBoundLine(chart, 140, 90);
-    if(type == 'BP_D')  addBoundLine(chart, 90, 60);
-    if(type == 'HR')    addBoundLine(chart, 100, 60);
-    if(type == 'Steps') addKcalLine(chart, dat_Kcal, "Kcal", "#eeee00");
+    updateCardData(type);
+    if(type == 'BP_S')  addBoundLine(chart, up_BPS, low_BPS);
+    if(type == 'HR')    addBoundLine(chart, up_HR, low_HR);
 }
 
 function updateChartData(type){
     switch(type){
-        case 'none':
-            title = "The Default Chart";
-            rcd_title = "Blood Pressure - systolic (mmHg)";
-            rcd_color = "#677483";
-            rcd_data = dat_BPS;
-            break;
         case 'BP_S':
-            title = "Blood Pressure (systolic)";
-            rcd_title = "Blood Pressure - systolic (mmHg)";
+            title = "SpO2";
+            rcd_title = "SpO2(%)";
             rcd_color = "#ff7782";
             rcd_data = dat_BPS;
-            break;
-        case 'BP_D':
-            title = "Blood Pressure (diastolic)";
-            rcd_title = "Blood Pressure - diastolic (mmHg)";
-            rcd_color = "#ff7782";
-            rcd_data = dat_BPD;
+            console.log(dat_BPS);
             break;
         case 'HR':
             title = "Heart Rate";
@@ -156,27 +153,11 @@ function updateChartData(type){
             rcd_color = "#2E87A3";
             rcd_data = dat_HR;
             break;
-        case 'Steps':
-            title = "Steps & Kcal";
-            rcd_title = "Steps";
-            rcd_color = "#ffbb55";
-            rcd_data = dat_Steps;
-            break;
     };
     rcd_date = dat_Date;
     console.log("updateChartData");
 }
 
-function addKcalLine(myChart, dat, lab, color) {
-    myChart.data.datasets.push({ 
-        data: dat,
-        label: lab,
-        borderColor: color,
-        fill: false
-    });
-    myChart.update();
-    console.log("addKcalLine");
-}
 
 function addBoundLine(myChart, upperBound, lowerBound){
     myChart.data.datasets.push({ 

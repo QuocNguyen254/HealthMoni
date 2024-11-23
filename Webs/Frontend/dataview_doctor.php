@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-include '../php/connect.php'; 
+include '../Backend/connect.php'; 
 if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
 
 ?>
@@ -57,7 +57,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
                          <span class="material-icons">calendar_month</span>
                          <h3>Booking</h3>
                      </a>
-                     <a id="menu_logout" href="../php/logout.php">
+                     <a id="menu_logout" href="../Backend/logout.php">
                          <span class="material-icons">logout</span>
                          <h3>Logout</h3>
                      </a>
@@ -113,7 +113,7 @@ if(isset($_SESSION['id'])&& isset($_SESSION['user_name'])){
 <?php
 
 }else{
-    header("Location: ../html/index.html");
+    header("Location: ../Frontend/index.html");
     exit();
 }
 ?>
